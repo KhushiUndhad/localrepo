@@ -108,3 +108,32 @@ resource "aws_db_instance" "mydb" {
 		Name = "MyRDS"
 	}
 }
+
+#Define aws Provider
+
+provider "aws" {
+	region = "ap-south-1"	#aws region where resource will be created
+}
+
+#create S3 bucket
+resource "aws_s3_bucket" "my_bucket_first" {
+	
+	bucket = "my-terraform-bucket-2475"
+
+	tags = {
+		Name = "MyBucket"
+	}
+}
+
+
+# Upload Image to S3
+resource "aws_s3_object" "image_upload" {
+
+	bucket = aws_s3_bucket.my_bucket_first.id
+
+	key = "bird.jpg"
+	source = "bird.jpg"
+	
+	etag = filemd5("bird.jpg")
+}
+
